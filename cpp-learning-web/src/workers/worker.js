@@ -1,5 +1,4 @@
 export default {
-  name: 'cpp-compiler',
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
@@ -9,7 +8,7 @@ export default {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         },
       });
     }
@@ -18,7 +17,7 @@ export default {
     if (url.pathname === '/compile' && request.method === 'POST') {
       try {
         const body = await request.json();
-        const { code, input, language } = body;
+        const { code, input } = body;
 
         if (!code) {
           return new Response(JSON.stringify({ error: 'Code is required' }), {
@@ -30,17 +29,17 @@ export default {
           });
         }
 
-        // Prepare request to OnlineCompiler API
-        const apiResponse = await fetch('https://api.onlinecompiler.io/compile', {
+        // Prepare request to OnlineCompiler API (Sync endpoint)
+        const apiResponse = await fetch('https://api.onlinecompiler.io/api/run-code-sync/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'd8ccf90459970a7e6c4ef639d3dd35ae',
           },
           body: JSON.stringify({
+            compiler: 'g++-15',
             code: code,
             input: input || '',
-            language: language || 'cpp',
           }),
         });
 

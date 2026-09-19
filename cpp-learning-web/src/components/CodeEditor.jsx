@@ -1,21 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const WORKER_URL = 'https://your-worker-name.your-subdomain.workers.dev/compile';
+// Replace this with your actual Cloudflare Worker URL after deployment
+const WORKER_URL = 'https://cpp-compiler.YOUR-SUBDOMAIN.workers.dev/compile';
 
 function CodeEditor({ exercise, onCompile }) {
   const [code, setCode] = useState(exercise?.template || '');
   const [inputValue, setInputValue] = useState(exercise?.input || '');
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  
   // Reset when exercise changes
-  useState(() => {
+  useEffect(() => {
     if (exercise) {
       setCode(exercise.template);
       setInputValue(exercise.input || '');
       setResult(null);
     }
-  });
+  }, [exercise]);
 
   const handleCompile = async () => {
     setIsLoading(true);
@@ -30,36 +31,51 @@ function CodeEditor({ exercise, onCompile }) {
         body: JSON.stringify({
           code: code,
           input: inputValue,
-          language: 'cpp'
         }),
       });
 
       const data = await response.json();
 
+      // Handle API response from OnlineCompiler
       if (data.error) {
+        // Compilation or runtime error
         setResult({
           success: false,
-          output: '',
-          error: data.error
+          output: data.output || '',
+          error: data.error,
+          exit_code: data.exit_code,
+          time: data.time,
+          memory: data.memory
         });
-      } else if (data.stderr && data.stderr.trim() !== '') {
+      } else if (data.status === 'error' || data.exit_code !== 0) {
+        // Runtime error or non-zero exit code
         setResult({
           success: false,
-          output: data.stdout || '',
-          error: data.stderr
+          output: data.output || '',
+          error: data.error || `Exit code: ${data.exit_code}`,
+          exit_code: data.exit_code,
+          time: data.time,
+          memory: data.memory
         });
       } else {
+        // Success
         setResult({
           success: true,
-          output: data.stdout || '(No output)',
-          error: ''
+          output: data.output || '(No output)',
+          error: '',
+          exit_code: data.exit_code,
+          time: data.time,
+          memory: data.memory
         });
       }
     } catch (error) {
       setResult({
         success: false,
         output: '',
-        error: `Connection error: ${error.message}`
+        error: `Connection error: ${error.message}. Make sure your Worker URL is correct.`,
+        exit_code: null,
+        time: null,
+        memory: null
       });
     } finally {
       setIsLoading(false);
@@ -98,6 +114,7 @@ function CodeEditor({ exercise, onCompile }) {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             spellCheck="false"
+            placeholder="// Viết code C++ của bạn vào đây..."
           />
         </div>
 
@@ -108,7 +125,7 @@ function CodeEditor({ exercise, onCompile }) {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             rows="3"
-            placeholder="Nhập dữ liệu đầu vào cho chương trình..."
+            placeholder="Nhập dữ liệu đầu vào cho chương trình (stdin)..."
           />
         </div>
 
@@ -136,6 +153,25 @@ function CodeEditor({ exercise, onCompile }) {
               <span className={`result-status ${result.success ? 'success' : 'error'}`}>
                 {result.success ? '✓ Success' : '✗ Error'}
               </span>
+            </div>
+            
+            {/* Stats */}
+            <div style={{ 
+              display: 'flex', 
+              gap: '15px', 
+              marginBottom: '15px', 
+              fontSize: '0.85rem',
+              color: 'var(--text-secondary)'
+            }}>
+              {result.time && (
+                <span>⏱ Time: {result.time}s</span>
+              )}
+              {result.memory && (
+                <span>💾 Memory: {result.memory} KB</span>
+              )}
+              {result.exit_code !== null && result.exit_code !== undefined && (
+                <span>Exit Code: {result.exit_code}</span>
+              )}
             </div>
             
             {result.output && (
