@@ -1,0 +1,104 @@
+{
+  "title": "Học C++ Cơ Bản đến Nâng Cao",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Hướng dẫn Code::Blocks",
+      "content": "## Hướng dẫn cài đặt và dùng Code::Blocks\n\n### 1. Tải và cài đặt Code::Blocks\n- **Link tải:** [http://www.codeblocks.org/downloads/26](http://www.codeblocks.org/downloads/26)\n- **Windows 64-bit:** Chọn `codeblocks-20.03mingw-setup.exe`\n- **Windows 32-bit:** Chọn `codeblocks-20.03mingw-32bit-setup.exe`\n\n**Cài đặt phím tắt tự định dạng code (Format):**\n1. Vào `Settings` -> `Editor` -> `Keyboard shortcuts`.\n2. Tìm `Source code formatter (AStyle)` và gán phím tắt (ví dụ: `Alt-Shift-F`).\n\n### 2. Tạo Project mới\n1. Chọn `Create a new project` -> `Console application` -> `Go`.\n2. Chọn ngôn ngữ `C++`.\n3. Đặt `Project title` và chọn `Folder to create project in`.\n4. Chọn `GNU GCC Compiler`, tích cả `Debug` và `Release` -> `Finish`.\n5. Mở file `main.cpp` trong phần `Sources`, nhấn **F9** để dịch và chạy.",
+      "exercises": []
+    },
+    {
+      "id": "topic1",
+      "title": "Chủ đề 1: Làm quen với C++",
+      "content": "## Chủ đề 1: Làm quen với C++\n\n**Mục tiêu:** Toán tử số học, xuất/nhập dữ liệu, hằng và biến.\n\n### 1. Các phép toán số học\n\n| Phép toán | Ký hiệu | Ví dụ | Kết quả |\n|-----------|---------|-------|---------|\n| Cộng      | `+`     | `9+4` | `13`    |\n| Trừ       | `-`     | `9-4` | `5`     |\n| Nhân      | `*`     | `9*4` | `36`    |\n| Chia      | `/`     | `9/4` | `2` (nguyên) |\n| Chia      | `/`     | `9.0/4`| `2.25` (thực) |\n| Chia lấy dư | `%`   | `9%4` | `1`     |\n| Tăng 1    | `++`    | `a++` | `a = a+1`|\n| Giảm 1    | `--`    | `a--` | `a = a-1`|\n\n### Xuất mặc định\n\n```cpp\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"9+4=\" << 9+4 << endl;\n    cout << \"9/4=\" << 9/4 << endl;   // Lấy phần nguyên\n    cout << \"9/4=\" << 9.0/4 << endl; // Lấy phần thập phân\n    cout << \"9%4=\" << 9%4 << endl;\n    return 0;\n}\n```\n\n### Xuất định dạng (`<iomanip>`)\n\n- `setw(n)`: Độ rộng.\n- `left` / `right`: Căn lề.\n- `setprecision(n)` và `fixed`: Số chữ số thập phân.\n\n```cpp\n#include <iostream>\n#include <iomanip>\nusing namespace std;\n\nint main() {\n    cout << setw(10) << left << \"9+4=\" << 9+4 << endl;\n    cout << setw(10) << left << setprecision(5) << fixed << \"9/4=\" << 9.0/4 << endl;\n    return 0;\n}\n```\n\n### Hằng, Biến và Nhập/Xuất\n\n- **Hằng (`const`):** Giá trị không đổi. `const double PI = 3.14159;`\n- **Biến:** Giá trị có thể thay đổi. `int a = 0, b = 20;`\n\n```cpp\n#include <iostream>\n#include <iomanip>\nusing namespace std;\n\nint main() {\n    const float pi = 3.14;\n    float ban_kinh, dien_tich, chu_vi;\n    \n    cout << \"Nhap ban kinh = \";\n    cin >> ban_kinh;\n    \n    dien_tich = pi * ban_kinh * ban_kinh;\n    chu_vi = 2 * pi * ban_kinh;\n    \n    cout << setprecision(5) << fixed << \"Dien tich: \" << dien_tich << endl;\n    cout << setprecision(5) << fixed << \"Chu vi: \" << chu_vi << endl;\n    return 0;\n}\n```",
+      "exercises": [
+        {
+          "id": "ex1-1",
+          "title": "Bài tập 1.1: Tính diện tích hình tròn",
+          "description": "Nhập bán kính hình tròn và tính diện tích, chu vi. Sử dụng hằng số PI = 3.14",
+          "template": "#include <iostream>\n#include <iomanip>\nusing namespace std;\n\nint main() {\n    const float pi = 3.14;\n    float ban_kinh, dien_tich, chu_vi;\n    \n    cout << \"Nhap ban kinh = \";\n    cin >> ban_kinh;\n    \n    // Tính diện tích và chu vi tại đây\n    dien_tich = ...;\n    chu_vi = ...;\n    \n    cout << setprecision(5) << fixed << \"Dien tich: \" << dien_tich << endl;\n    cout << setprecision(5) << fixed << \"Chu vi: \" << chu_vi << endl;\n    return 0;\n}",
+          "input": "5",
+          "expectedOutput": "Dien tich: 78.50000\nChu vi: 31.40000"
+        }
+      ]
+    },
+    {
+      "id": "topic2",
+      "title": "Chủ đề 2: Lệnh điều kiện, lặp",
+      "content": "## Chủ đề 2: Lệnh điều kiện, lệnh lặp\n\n### 1. Toán tử quan hệ & Logic\n- **Quan hệ:** `==`, `!=`, `>`, `<`, `>=`, `<=`\n- **Logic:** AND (`&&`), OR (`||`), NOT (`!`)\n\n### 2. Lệnh `if ... else` và Toán tử 3 ngôi\n\n```cpp\n// Toán tử 3 ngôi: c = (a > b ? a - b : a + b);\nint a, b, S;\ncin >> a >> b;\nS = (a > b ? a - b : a + b);\ncout << S << endl;\n```\n\n### 3. Lệnh `switch ... case`\n\n```cpp\nchar dau;\nint a, b, S;\ncin >> a >> b >> dau;\n\nswitch (dau) {\n    case '+': S = a + b; break;\n    case '-': S = a - b; break;\n    case '*': S = a * b; break;\n    case '/': \n        if (b == 0) cout << \"Phep chia cho 0!\";\n        else S = a / b; \n        break;\n    default: cout << \"Phep tinh khong hop le!\";\n}\n```\n\n### 4. Vòng lặp (`for`, `while`, `do ... while`)\n\n```cpp\n// Vòng for\nfor (int a = 1; a <= 15; a++) {\n    cout << \"Gia tri cua a la: \" << a << endl;\n}\n\n// Vòng do-while (thực hiện ít nhất 1 lần)\nint a = 0;\ndo {\n    a++;\n    cout << a << endl;\n} while (a < 15);\n```",
+      "exercises": [
+        {
+          "id": "ex2-1",
+          "title": "Bài tập 2.1: Kiểm tra chẵn lẻ",
+          "description": "Nhập một số nguyên N và kiểm tra xem N là số chẵn hay lẻ",
+          "template": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int N;\n    cout << \"Nhap N = \";\n    cin >> N;\n    \n    // Kiểm tra chẵn lẻ tại đây\n    if (...) {\n        cout << N << \" la so chan\";\n    } else {\n        cout << N << \" la so le\";\n    }\n    \n    return 0;\n}",
+          "input": "6",
+          "expectedOutput": "6 la so chan"
+        },
+        {
+          "id": "ex2-2",
+          "title": "Bài tập 2.2: Máy tính đơn giản",
+          "description": "Nhập hai số a, b và một phép toán (+, -, *, /). Thực hiện phép tính và hiển thị kết quả",
+          "template": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a, b, S;\n    char dau;\n    \n    cout << \"Nhap a = \"; cin >> a;\n    cout << \"Nhap b = \"; cin >> b;\n    cout << \"Nhap phep toan (+, -, *, /): \"; cin >> dau;\n    \n    switch (dau) {\n        case '+': \n            S = a + b; \n            break;\n        // Thêm các case còn lại\n        default: \n            cout << \"Phep tinh khong hop le!\";\n            return 0;\n    }\n    \n    cout << \"Ket qua: \" << S << endl;\n    return 0;\n}",
+          "input": "10\n5\n+",
+          "expectedOutput": "Ket qua: 15"
+        }
+      ]
+    },
+    {
+      "id": "topic3",
+      "title": "Chủ đề 3: Mảng một chiều",
+      "content": "## Chủ đề 3: Mảng một chiều\n\n### Khai báo & Khởi tạo\n\n```cpp\nint array1[4] = {5, 8, 2, 7}; // Chỉ định rõ\nint array2[] = {5, 8, 2, 7};  // Tự suy ra kích thước\nint array3[4] = {};           // Khởi tạo toàn 0\n```\n\n### Nhập/Xuất mảng bằng vòng lặp\n\n```cpp\nint a[200], n;\ncout << \"Nhap so phan tu n = \"; cin >> n;\nfor (int i = 0; i < n; i++) {\n    cout << \"a[\" << i << \"]=\"; cin >> a[i];\n}\nfor (int i = 0; i < n; i++) {\n    cout << a[i] << \" \";\n}\n```\n\n### Sắp xếp mảng (Dùng hàm `sort` trong `<algorithm>`)\n\n```cpp\n#include <algorithm>\n#include <functional>\n// ...\nsort(a, a + n);                      // Tăng dần\nsort(a, a + n, greater<int>());      // Giảm dần\n```\n\n### Xóa phần tử trùng lặp\n\n```cpp\nvoid RemoveDuplicates(int arr[], int &n) {\n    for (int i = 0; i < n; i++) {\n        for (int j = i + 1; j < n; ) {\n            if (arr[i] == arr[j]) {\n                for (int k = j; k < n - 1; k++) arr[k] = arr[k + 1];\n                n--;\n            } else {\n                j++;\n            }\n        }\n    }\n}\n```",
+      "exercises": [
+        {
+          "id": "ex3-1",
+          "title": "Bài tập 3.1: Nhập và xuất mảng",
+          "description": "Nhập số phần tử n và n số nguyên vào mảng, sau đó xuất ra màn hình",
+          "template": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a[200], n;\n    cout << \"Nhap so phan tu n = \";\n    cin >> n;\n    \n    // Nhập mảng\n    for (int i = 0; i < n; i++) {\n        cout << \"a[\" << i << \"]=\";\n        cin >> a[i];\n    }\n    \n    // Xuất mảng\n    for (int i = 0; i < n; i++) {\n        cout << a[i] << \" \";\n    }\n    \n    return 0;\n}",
+          "input": "5\n10 20 30 40 50",
+          "expectedOutput": "10 20 30 40 50 "
+        }
+      ]
+    },
+    {
+      "id": "topic4",
+      "title": "Chủ đề 4: Xâu ký tự",
+      "content": "## Chủ đề 4: Xâu ký tự (String)\n\n### Khai báo & Nhập xuất\n\n```cpp\n#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string S;\n    cout << \"Nhap xau S = \";\n    getline(cin, S); // Đọc cả dòng\n    cout << \"Do dai xau: \" << S.length() << endl;\n    return 0;\n}\n```\n\n### Các phương thức xử lý String\n\n- `S.empty()`: Kiểm tra xâu rỗng.\n- `S.clear()`: Xóa sạch xâu.\n- `S.pop_back()`: Xóa ký tự cuối.\n- `S.push_back('c')` / `S.append(\"text\")` / `S1 + S2`: Nối xâu.\n- `S.insert(vitri, \"xau\")`: Chèn xâu.\n- `S.replace(vitri, soluong, \"xau_moi\")`: Thay thế.\n- `S.find(\"xau_con\")`: Tìm vị trí xuất hiện (trả về `-1` nếu không thấy).\n- `S1.compare(S2)`: So sánh (`== 0` là bằng nhau).\n\n### Chuyển đổi Số <-> Xâu\n\n```cpp\nint so = 45;\nstring s_so = to_string(so); // int sang string\nint so_moi = stoi(s_so);     // string sang int\n```\n\n### Chuẩn hóa xâu\n\n```cpp\n#include <sstream>\n// ...\nstring S = \"  xin   chao tat ca  \";\nstringstream ss(S);\nstring token, kq;\nwhile (ss >> token) {\n    token[0] = toupper(token[0]);\n    for (int i = 1; i < token.length(); i++) {\n        token[i] = tolower(token[i]);\n    }\n    kq.append(token).append(\" \");\n}\nkq.pop_back(); // Xóa dấu cách thừa cuối cùng\n```",
+      "exercises": [
+        {
+          "id": "ex4-1",
+          "title": "Bài tập 4.1: Độ dài xâu",
+          "description": "Nhập một xâu ký tự và hiển thị độ dài của xâu",
+          "template": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string S;\n    cout << \"Nhap xau S = \";\n    getline(cin, S);\n    \n    // Hiển thị độ dài xâu\n    cout << \"Do dai xau: \" << ... << endl;\n    \n    return 0;\n}",
+          "input": "Hello C++",
+          "expectedOutput": "Do dai xau: 9"
+        }
+      ]
+    },
+    {
+      "id": "topic5",
+      "title": "Chủ đề 5: Đọc/Ghi File",
+      "content": "## Chủ đề 5: Đọc tệp, ghi tệp\n\nSử dụng thư viện `<fstream>`.\n- `ofstream`: Ghi file.\n- `ifstream`: Đọc file.\n- `fstream`: Cả đọc và ghi.\n\n### 1. Ghi tệp\n\n```cpp\nofstream outFile(\"Data.txt\", ios::out);\nif (outFile.is_open()) {\n    outFile << \"Trung tam tin hoc\" << endl;\n    outFile.close();\n}\n```\n\n### 2. Đọc tệp\n\n```cpp\nifstream inFile(\"Data.txt\", ios::in);\nchar chuoi[100];\nif (inFile.is_open()) {\n    inFile.getline(chuoi, 100);\n    cout << chuoi << endl;\n    inFile.close();\n}\n```\n\n### 3. Các hàm kiểm tra trạng thái File\n\n- `eof()`: Trả về `true` nếu đã đọc đến cuối file.\n- `fail()`: Trả về `true` nếu có lỗi không trầm trọng (sai kiểu dữ liệu).\n- `bad()`: Trả về `true` nếu có lỗi trầm trọng.\n- `good()`: Trả về `true` nếu mọi thứ hoàn hảo.\n\n### 4. Con trỏ trong File\n\n- **Đọc (`ifstream`):** `tellg()` (xem vị trí), `seekg(offset, ios::beg/cur/end)` (nhảy vị trí).\n- **Ghi (`ofstream`):** `tellp()`, `seekp()`.",
+      "exercises": [
+        {
+          "id": "ex5-1",
+          "title": "Bài tập 5.1: Kiểm tra số chẵn/lẻ từ File",
+          "description": "Đọc số N từ file BAI1.INP và ghi kết quả ra màn hình",
+          "template": "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main() {\n    ifstream fin(\"BAI1.INP\", ios::in);\n    int N;\n    \n    if (fin.fail()) {\n        cout << \"Loi mo tep\";\n    } else {\n        fin >> N;\n        fin.close();\n        \n        if (N % 2 == 0) {\n            cout << N << \" la so chan\";\n        } else {\n            cout << N << \" la so le\";\n        }\n    }\n    return 0;\n}",
+          "input": "",
+          "expectedOutput": "6 la so chan",
+          "note": "Lưu ý: Bài tập này cần file input. Khi compile online, hãy sửa thành nhập từ bàn phím để test."
+        },
+        {
+          "id": "ex5-2",
+          "title": "Bài tập 5.2: Tính tích hai số",
+          "description": "Đọc hai số a, b từ file và tính tích của chúng",
+          "template": "#include <iostream>\n#include <fstream>\nusing namespace std;\n\nint main() {\n    int a, b;\n    ifstream docvao(\"Cau2.INP\", ios::in);\n    \n    if (docvao.fail()) {\n        cout << \"Loi tep\";\n    } else {\n        docvao >> a >> b;\n        cout << a * b;\n        docvao.close();\n    }\n    return 0;\n}",
+          "input": "",
+          "expectedOutput": "54",
+          "note": "Lưu ý: Để test online, sửa thành nhập từ cin >> a >> b;"
+        }
+      ]
+    }
+  ]
+}
